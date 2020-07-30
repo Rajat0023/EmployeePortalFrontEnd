@@ -84,7 +84,7 @@ class Employee extends Component {
             modalIsOpen: false,
             failedSignUp: false,
             successMessage: "",
-            open: false,
+            
             rows: [
                 {
                     name: 'Rajat',
@@ -162,7 +162,21 @@ class Employee extends Component {
 
 
     componentWillMount() {
-        this.setState({ rowsNew: this.state.rows })
+        let xhrGetAll = new XMLHttpRequest();
+            let that = this;
+            xhrGetAll.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    console.log(this.responseText);
+                    that.setState({ rowsNew: JSON.parse(this.responseText).employees })
+                }
+
+            })
+
+            xhrGetAll.open("GET", "http://localhost:7000/" + "employee/v1/get/all");
+            xhrGetAll.setRequestHeader("Content-Type", "application/json");
+            xhrGetAll.setRequestHeader("Cache-Control", "no-cache");
+            xhrGetAll.send(null);
+
         console.log(this.state.rowsNew);
     }
 
@@ -259,10 +273,10 @@ class Employee extends Component {
                             {this.state.rowsNew.map((row) => (
                                 <StyledTableRow key={row.name}>
                                     <StyledTableCell component="th" scope="row">
-                                        {row.name}
+                                        {row.firstName +" "+ row.lastName}
                                     </StyledTableCell>
                                     <StyledTableCell align="right">{row.gender}</StyledTableCell>
-                                    <StyledTableCell align="right">{row.dob}</StyledTableCell>
+                                    <StyledTableCell align="right">{row.dateOfBirth}</StyledTableCell>
                                     <StyledTableCell align="right">{row.department}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
