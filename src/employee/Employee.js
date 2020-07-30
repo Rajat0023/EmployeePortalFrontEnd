@@ -83,23 +83,7 @@ class Employee extends Component {
             invalidSignUpContact: "dispNone",
             modalIsOpen: false,
             failedSignUp: false,
-            successMessage: "",         
-            rows: [
-                {
-                    name: 'Rajat',
-                    gender: 'male',
-                    dob: '01-05-1993',
-                    department: 'Holmes'
-
-                },
-                {
-                    name: 'Shubham',
-                    gender: 'male',
-                    dob: '08-05-1994',
-                    department: 'Digital'
-
-                },
-            ],
+            successMessage: "",
             rowsNew: []
         }
     };
@@ -163,19 +147,19 @@ class Employee extends Component {
 
     componentWillMount() {
         let xhrGetAll = new XMLHttpRequest();
-            let that = this;
-            xhrGetAll.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    console.log(this.responseText);
-                    that.setState({ rowsNew: JSON.parse(this.responseText).employees })
-                }
+        let that = this;
+        xhrGetAll.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+                that.setState({ rowsNew: JSON.parse(this.responseText).employees })
+            }
 
-            })
+        })
 
-            xhrGetAll.open("GET", "http://localhost:7000/" + "employee/v1/get/all");
-            xhrGetAll.setRequestHeader("Content-Type", "application/json");
-            xhrGetAll.setRequestHeader("Cache-Control", "no-cache");
-            xhrGetAll.send(null);
+        xhrGetAll.open("GET", "http://localhost:7000/" + "employee/v1/get/all");
+        xhrGetAll.setRequestHeader("Content-Type", "application/json");
+        xhrGetAll.setRequestHeader("Cache-Control", "no-cache");
+        xhrGetAll.send(null);
 
         console.log(this.state.rowsNew);
     }
@@ -228,10 +212,10 @@ class Employee extends Component {
 
     handleCloseForSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         this.setState({ open: false })
-      };
+    };
 
     render() {
         const { classes } = this.props;
@@ -273,7 +257,7 @@ class Employee extends Component {
                             {this.state.rowsNew.map((row) => (
                                 <StyledTableRow key={row.name}>
                                     <StyledTableCell component="th" scope="row">
-                                        {row.firstName +" "+ row.lastName}
+                                        {row.firstName + " " + row.lastName}
                                     </StyledTableCell>
                                     <StyledTableCell align="right">{row.gender}</StyledTableCell>
                                     <StyledTableCell align="right">{row.dateOfBirth}</StyledTableCell>
