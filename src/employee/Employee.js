@@ -83,8 +83,7 @@ class Employee extends Component {
             invalidSignUpContact: "dispNone",
             modalIsOpen: false,
             failedSignUp: false,
-            successMessage: "",
-            
+            successMessage: "",         
             rows: [
                 {
                     name: 'Rajat',
@@ -139,6 +138,7 @@ class Employee extends Component {
                     that.setState({ open: true })
                     that.setState({ successMessage: "Registration Successfull!" });
                     that.setState({ modalIsOpen: false });
+                    that.componentWillMount();
                 }
                 if (this.readyState === 4 && this.status !== 201) {
                     console.log(this.responseText);
