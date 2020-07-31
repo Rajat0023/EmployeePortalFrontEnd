@@ -22,6 +22,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 const customStyles = {
     content: {
@@ -76,6 +77,7 @@ class Employee extends Component {
             gender: "",
             dob: "",
             department: "",
+            open: false,
             firstnameRequired: "dispNone",
             genderRequired: "dispNone",
             dobRequired: "dispNone",
@@ -84,6 +86,7 @@ class Employee extends Component {
             modalIsOpen: false,
             failedSignUp: false,
             successMessage: "",
+            errorMessage: "",
             rowsNew: []
         }
     };
@@ -122,19 +125,15 @@ class Employee extends Component {
                     that.setState({ open: true })
                     that.setState({ successMessage: "Registration Successfull!" });
                     that.setState({ modalIsOpen: false });
-                    that.componentWillMount();
+                    that.setState({ failedSignUp: false });
                 }
                 if (this.readyState === 4 && this.status !== 201) {
                     console.log(this.responseText);
                     that.setState({ failedSignUp: true });
+                    that.setState({ open: true });
                     that.setState({ errorMessage: JSON.parse(this.responseText).message })
-
-                    if (that.state.invalidPassword === 'dispNone' && that.state.invalidSignUpContact === 'dispNone'
-                        && that.state.invalidEmail === 'dispNone') {
-                        that.setState({ message: 'dispBlock' })
-                    }
                 }
-
+                that.componentWillMount();
             })
 
             xhrSignUp.open("POST", "http://localhost:7000/" + "employee/v1/register");
@@ -347,6 +346,7 @@ class Employee extends Component {
                 </Modal>
 
                 {/* SnackBar Part */}
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -355,11 +355,18 @@ class Employee extends Component {
                     open={this.state.open}
                     autoHideDuration={3000}
                     onClose={this.handleCloseForSnackBar}
-                    ContentProps={{
-                        'aria-describedby': 'message-id',
-                    }}
-                    message={<span id="message-id">{this.state.successMessage}</span>}
-                />
+                >
+                    {this.state.failedSignUp === false
+                        ?
+                        <Alert onClose={this.handleCloseForSnackBar} variant="filled" severity="success">
+                            {this.state.successMessage}
+                        </Alert>
+                        :
+                        <Alert onClose={this.handleCloseForSnackBar} variant="filled" severity="error">
+                            {this.state.errorMessage}
+                        </Alert>
+                    }
+                </Snackbar>
             </div>
         )
     }
